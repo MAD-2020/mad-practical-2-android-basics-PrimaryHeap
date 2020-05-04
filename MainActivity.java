@@ -1,38 +1,85 @@
 package sg.edu.np.WhackAMole;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
-
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+  int score = 0;
+  private static final String TAG = "Whack-A-Mole!";
+  private static final int[] Buttonid = {
+    R.id.button0,
+    R.id.button1,
+    R.id.button2,
+  };
+  private static final String[] ButtonText = {
+    "Button Left Clicked!",
+    "Button Middle Clicked!",
+    "Button Right Clicked!",
+  };
 
-    /* Hint
-        - The function setNewMole() uses the Random class to generate a random value ranged from 0 to 2.
-        - Feel free to modify the function to suit your program.
-    */
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    Log.v(TAG, "Finished Pre-Initialisation!");
+  }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+  @Override
+  protected void onStart() {
+    super.onStart();
+    setNewMole();
+    DisplayScore();
+    Log.v(TAG, "Starting GUI!");
+  }
 
-        Log.v(TAG, "Finished Pre-Initialisation!");
+  public void DisplayScore() {
+    TextView msg = findViewById(R.id.message);
+    String s = String.valueOf(score);
+    msg.setText(s);
+  }
+
+  public void setNewMole() {
+    Random ran = new Random();
+    mole = ran.nextInt(1000000000) % 3;
+    for (int i = 0; i < Buttonid.length; i++) {
+      int id = Buttonid[i];
+      final int setb = i;
+
+      if (Buttonid[mole] != id) {
+        Button button = findViewById(id);
+
+        button.setText("0");
+
+        button.setOnClickListener(
+          new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+              score--;
+              DisplayScore();
+              setNewMole();
+              Log.v(TAG, ButtonText[setb] + " Missed, score deducted!");
+            }
+          }
+        );
+      } else {
+        Button button = findViewById(id);
+        button.setText("*");
+        button.setOnClickListener(
+          new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+              score++;
+              DisplayScore();
+              setNewMole();
+              Log.v(TAG, ButtonText[setb] + " Hit, score added!");
+            }
+          }
+        );
+      }
     }
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        setNewMole();
-        Log.v(TAG, "Starting GUI!");
-    }
-
-
-    public void setNewMole()
-    {
-        Random ran = new Random();
-        int randomLocation = ran.nextInt(3);
-    }
+  }
 }
