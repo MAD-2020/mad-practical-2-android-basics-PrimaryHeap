@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
   public void setNewMole() {
     Random ran = new Random();
-    mole = ran.nextInt(1000000000) % 3;
+    int mole = ran.nextInt(1000000000) % 3;
     for (int i = 0; i < Buttonid.length; i++) {
       int id = Buttonid[i];
       final int setb = i;
@@ -57,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-              score--;
+              if (score > 0) {
+                score--;
+              }
               DisplayScore();
               setNewMole();
               Log.v(TAG, ButtonText[setb] + " Missed, score deducted!");
